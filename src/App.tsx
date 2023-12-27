@@ -1,41 +1,52 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
+import {v1} from 'uuid';
+import EditIcon from '@mui/icons-material/Edit';
 
 import './App.css';
 
 type ArrayType = {
-  id: number
+  id: string
   title: string
   isDone: boolean
 }
 
 function App() {
-  const [tasks, setTasks] = useState <ArrayType[]>([
-    {id: 1, title: "Купить хлеба", isDone: false},
-    {id: 2, title: "Купить молоко", isDone: false},
-    {id: 3, title: "Купить рыбу", isDone: false},
-  ])
-  const [text, setText] = useState('')
+  const [tasks, setTasks] = useState<ArrayType[]>(JSON.parse(localStorage.getItem('tasks') || '[]'));
+  const [text, setText] = useState<string>('');
 
-  const onRemoveTask = (id: number) => {
+  const onRemoveTask = (id: string) => {
     let filteredTasks = tasks.filter(t=> t.id !== id)
     setTasks(filteredTasks)
   }
 
   const addTask = (text: string) => {
-    let newTask = {id: 4, title: text, isDone: false}
+    let newTask = {id: v1(), title: text, isDone: false}
     let newTasks = [newTask, ...tasks]
     setTasks(newTasks)
     setText("")
   }
 
+  useEffect(() => {
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+  }, [tasks]);
+
+
   return (
     <div className="App">
-      <input value={text} onChange={(e) => setText(e.currentTarget.value)}/>
+      <input value={text}
+             onChange={(e) => setText(e.currentTarget.value)}
+             onKeyPress={(e) => {
+               if(e.key === 'Enter') {
+                 addTask(text)
+               }
+             }}
+      />
       <button onClick={() => addTask(text)}>add</button>
       {
         tasks.map(t => {
           return <div key={t.id}>
             {t.title}
+            <EditIcon />
             <button onClick={() => onRemoveTask(t.id)}>x</button>
           </div>
         })
@@ -45,3 +56,6 @@ function App() {
 }
 
 export default App;
+
+
+
