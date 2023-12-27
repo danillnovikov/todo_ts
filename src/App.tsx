@@ -14,17 +14,24 @@ function App() {
     {id: 2, title: "Купить молоко", isDone: false},
     {id: 3, title: "Купить рыбу", isDone: false},
   ])
+  const [text, setText] = useState('')
 
   const onRemoveTask = (id: number) => {
     let filteredTasks = tasks.filter(t=> t.id !== id)
-    console.log(filteredTasks)
     setTasks(filteredTasks)
+  }
+
+  const addTask = (text: string) => {
+    let newTask = {id: 4, title: text, isDone: false}
+    let newTasks = [newTask, ...tasks]
+    setTasks(newTasks)
+    setText("")
   }
 
   return (
     <div className="App">
-      <input/>
-      <button>add</button>
+      <input value={text} onChange={(e) => setText(e.currentTarget.value)}/>
+      <button onClick={() => addTask(text)}>add</button>
       {
         tasks.map(t => {
           return <div key={t.id}>
