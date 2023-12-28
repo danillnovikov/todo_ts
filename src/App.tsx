@@ -1,10 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, {ChangeEvent, useEffect, useState} from 'react';
 import {v1} from 'uuid';
-import EditIcon from '@mui/icons-material/Edit';
 
 import './App.css';
+import {EditableSpan} from "./components/EditableSpan";
+import AddItemForm from "./components/AddItemForm";
 
-type ArrayType = {
+export type ArrayType = {
   id: string
   title: string
   isDone: boolean
@@ -14,8 +15,9 @@ function App() {
   const [tasks, setTasks] = useState<ArrayType[]>(JSON.parse(localStorage.getItem('tasks') || '[]'));
   const [text, setText] = useState<string>('');
 
+
   const onRemoveTask = (id: string) => {
-    let filteredTasks = tasks.filter(t=> t.id !== id)
+    let filteredTasks = tasks.filter(t => t.id !== id)
     setTasks(filteredTasks)
   }
 
@@ -30,24 +32,54 @@ function App() {
     localStorage.setItem('tasks', JSON.stringify(tasks));
   }, [tasks]);
 
+  const changeTask = (id: string, newTitle: string) => {
+    let task = tasks.find(t => t.id === id)
+    if (task) {
+      task.title = newTitle
+      setTasks([...tasks])
+    }
+  }
+
+  const taskDone = (id: string) => {
+    setTasks(prevTasks => {
+      return prevTasks.map(task => {
+        if (task.id === id) {
+          return { ...task, isDone: !task.isDone };
+        }
+        return task;
+      });
+    });
+  };
+
+  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    setText(e.currentTarget.value)
+  }
+
 
   return (
     <div className="App">
-      <input value={text}
-             onChange={(e) => setText(e.currentTarget.value)}
-             onKeyPress={(e) => {
-               if(e.key === 'Enter') {
-                 addTask(text)
-               }
-             }}
+      <AddItemForm
+        onChangeHandler={onChangeHandler}
+        addTask={addTask}
+        text={text}
       />
-      <button onClick={() => addTask(text)}>add</button>
+
       {
         tasks.map(t => {
+          const onChangeTitleHandler = (newValue: string) => {
+            changeTask(t.id, newValue)
+          }
+
+
           return <div key={t.id}>
-            {t.title}
-            <EditIcon />
-            <button onClick={() => onRemoveTask(t.id)}>x</button>
+            <EditableSpan
+              title={t.title}
+              id={t.id}
+              isDone={t.isDone}
+              onChange={onChangeTitleHandler}
+              onRemoveTask={onRemoveTask}
+              onTaskDone={taskDone}
+            />
           </div>
         })
       }
