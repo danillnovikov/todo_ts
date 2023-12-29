@@ -1,0 +1,11 @@
+.button_add {
+    background-color: #7B68EE;
+    border-radius: 0;
+    text-transform: capitalize;
+    height: 40px;
+}
+
+.input_add {
+    width: 60%;
+    height: 40px;
+}

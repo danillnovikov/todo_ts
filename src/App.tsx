@@ -57,7 +57,8 @@ function App() {
 
 
   return (
-    <div className="App">
+    <div className="content">
+      <h1 className="title">Get things done!</h1>
       <AddItemForm
         onChangeHandler={onChangeHandler}
         addTask={addTask}
@@ -69,7 +70,6 @@ function App() {
           const onChangeTitleHandler = (newValue: string) => {
             changeTask(t.id, newValue)
           }
-
 
           return <div key={t.id}>
             <EditableSpan

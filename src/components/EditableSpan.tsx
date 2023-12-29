@@ -1,6 +1,7 @@
 import React, {ChangeEvent, useState} from "react";
-import {TextField} from "@mui/material";
+import {Button, TextField} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 
 type EditableSpanType = {
@@ -14,7 +15,7 @@ type EditableSpanType = {
 
 export function EditableSpan(props: EditableSpanType) {
   let [editMode, setEditMode] = useState(false)
-  let [title, setTitle] = useState("")
+  let [title, setTitle] = useState(props.title)
 
 
   const activateEditMode = () => {
@@ -34,15 +35,24 @@ export function EditableSpan(props: EditableSpanType) {
     props.onTaskDone(props.id);
   }
 
+  const handlerRemoveTask = () => {
+    props.onRemoveTask(props.id)
+  }
 
-  return editMode
-    ? <div>
-      <TextField value={title} onChange={onChangeTitleHandler}  autoFocus />
-      <button onClick={updateTitle}>Update</button>
+  return editMode ? (
+    <div>
+      <TextField value={title} onChange={onChangeTitleHandler} autoFocus/>
+      <Button onClick={updateTitle} variant={"contained"}>Update</Button>
+
     </div>
-    : <div>
-      <span onClick={handleTaskDone} style={{textDecoration: props.isDone ? "line-through": ""}}>{props.title}</span>
+  ) : (
+    <div>
+      <span
+        onClick={handleTaskDone}
+        style={{textDecoration: props.isDone ? "line-through" : ""}}
+      >{props.title}
+      </span>
       <EditIcon onClick={activateEditMode}/>
-      <button onClick={() => props.onRemoveTask(props.id)}>x</button>
-    </div>
+      <DeleteIcon onClick={handlerRemoveTask} />
+    </div>)
 }

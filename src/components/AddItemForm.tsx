@@ -1,4 +1,7 @@
-import React, {ChangeEvent} from 'react';
+import React, {ChangeEvent, useState, KeyboardEvent} from 'react';
+import TextField from '@mui/material/TextField';
+import {Button} from "@mui/material";
+import './AddItemForm.css'
 
 type PropsType = {
   text: string
@@ -7,18 +10,42 @@ type PropsType = {
 }
 
 const AddItemForm = (props: PropsType) => {
+  // const [error, setError] = useState<string | null>(null)
+
+  const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      props.addTask(props.text)
+    }
+
+  }
+
   return (
-    <div>
-      <input value={props.text}
-             onChange={props.onChangeHandler}
-             onKeyPress={(e) => {
-               if(e.key === 'Enter') {
-                 props.addTask(props.text)
-               }
-             }}
+    <>
+      <TextField
+
+        value={props.text}
+        onChange={props.onChangeHandler}
+        onKeyPress={onKeyPressHandler}
+        placeholder="What is the task today?"
+        // helperText={error}
+        className="input_add"
+        inputProps = {
+          {
+            sx: {
+              '&::placeholder': {
+                color: "#808080",
+                opacity: 1,
+              },
+            },
+          }
+        }
       />
-      <button onClick={() => props.addTask(props.text)}>Add task</button>
-    </div>
+      <Button
+        className="button_add"
+        variant="contained"
+        onClick={() => props.addTask(props.text)}
+      >Add task</Button>
+    </>
   );
 };
 
