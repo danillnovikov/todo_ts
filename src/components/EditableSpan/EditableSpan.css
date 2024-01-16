@@ -1,0 +1,14 @@
+.card_item {
+  padding: 15px;
+  margin: 30px auto;
+  width: 430px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  background-color: #7b68ee;
+}
+
+.text_item {
+  color: white;
+  font-size: 20px;
+}

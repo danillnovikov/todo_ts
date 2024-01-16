@@ -3,17 +3,12 @@
   margin: 50px auto;
   width: 600px;
   min-height: 250px;
-  background-color: #4B0082;
+  background-color: #210238;
   border-radius: 3%;
+  padding-bottom: 20px;
 }
 
 .title {
   padding-top: 50px;
   color: white;
 }
-
-
-
-
-
-
